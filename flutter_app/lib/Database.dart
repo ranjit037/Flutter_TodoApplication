@@ -61,7 +61,7 @@ class DBProvider {
     return res;
   }
 
-  updateClient(TodoList todoList) async {
+  updateTodoList(TodoList todoList) async {
     final db = await database;
     var res = await db.update("TodoList", todoList.toMap(),
         where: "id = ?", whereArgs: [todoList.id]);
@@ -94,7 +94,7 @@ class DBProvider {
     return list;
   }
 
-  deleteClient(int id) async {
+  deleteTodoList(int id) async {
     final db = await database;
     return db.delete("TodoList", where: "id = ?", whereArgs: [id]);
   }

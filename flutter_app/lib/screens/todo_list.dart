@@ -37,7 +37,7 @@ class TodoListVCState extends State<TodoListVC> {
                   key: UniqueKey(),
                   background: Container(color: Colors.red),
                   onDismissed: (direction) {
-                    DBProvider.db.deleteClient(item.id);
+                    DBProvider.db.deleteTodoList(item.id);
                   },
                   child: ListTile(
                     title: Text(item.description),
@@ -49,6 +49,14 @@ class TodoListVCState extends State<TodoListVC> {
                       },
                       value: item.isChecked,
                     ),
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddEditTodo(objTodoList: item),
+                        ),
+                      );
+                    },
                   ),
                 );
               },
@@ -64,7 +72,7 @@ class TodoListVCState extends State<TodoListVC> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddEditTodo(pageTitle: "Add Task"),
+              builder: (context) => AddEditTodo(),
             ),
           );
         },

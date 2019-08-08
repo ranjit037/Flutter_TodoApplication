@@ -6,16 +6,25 @@ import 'package:flutter_app/Database.dart';
 
 class AddEditTodo extends StatelessWidget {
 
-  final String pageTitle;
+  final TodoList objTodoList;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  AddEditTodo({this.pageTitle});
+  AddEditTodo({Key key, @required this.objTodoList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
     TextStyle textStyle = Theme.of(context).textTheme.title;
+//    String pageTitle = (objTodoList == null) ? "Add Task" : "Edit Task";
+    String pageTitle = "Add Task";
+    String btnTitle = "Save";
+    if (objTodoList != null) {
+      pageTitle = "Edit Task";
+      btnTitle = "Update";
+      titleController.text = objTodoList.title;
+      descriptionController.text = objTodoList.description;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -75,16 +84,25 @@ class AddEditTodo extends StatelessWidget {
                       color: Theme.of(context).primaryColorDark,
                       textColor: Theme.of(context).primaryColorLight,
                       child: Text(
-                        'Save',
+                        btnTitle,
                         textScaleFactor: 1.5,
                       ),
                       onPressed: () {
-                        if (titleController.text.trim() != "") {
-                          TodoList newValue1 = TodoList(title: titleController.text,description: descriptionController.text,createdDate: DateTime.now().millisecondsSinceEpoch,isChecked: false);
-                          DBProvider.db.newTodoList(newValue1);
+                        if (titleController.text.trim() != "" && descriptionController.text.trim() != "") {
+                          if (objTodoList != null) { // update
+                            objTodoList.title = titleController.text;
+                            objTodoList.description = descriptionController.text;
+                            DBProvider.db.updateTodoList(objTodoList);
+                          }
+                          else { //Add
+                            TodoList newValue1 = TodoList(title: titleController.text,description: descriptionController.text,createdDate: DateTime.now().millisecondsSinceEpoch,isChecked: false);
+                            DBProvider.db.newTodoList(newValue1);
+                          }
                           Navigator.pop(context);
                         }
+                        else {
 
+                        }
                       },
                     ),
                   ),
